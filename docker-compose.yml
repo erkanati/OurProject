@@ -1,0 +1,31 @@
+version: "3"
+services:
+  diploma:
+    build: .
+    ports:
+      - 8080:8080
+    links:
+      - db
+      - internal_site
+    environment:
+      - PGHOST=db
+      - PGPORT=5432
+      - PGDATABASE=diploma
+      - PGUSER=postgres
+      - PGPASSWORD=diploma
+    depends_on:
+      - "db"
+
+  client:
+    build: client
+    ports:
+      - 1337:80
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=diploma
+      - POSTGRES_DB=diploma
+
+  internal_site:
+    build: internal_site
